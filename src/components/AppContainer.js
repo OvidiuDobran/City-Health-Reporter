@@ -6,6 +6,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createStore, combineReducers } from 'redux';
 import SignInScreen from './SignInScreen';
 import HomeScreen from './HomeScreen';
+import CategoryScreen from './CategoryScreen';
 import AuthLoadingScreen from './AuthLoadingScreen';
 import store from '../store/store';
 import * as actionCreators from '../actions/action.creators';
@@ -13,6 +14,7 @@ import * as actionCreators from '../actions/action.creators';
 function mapStateToProps(state) {
     return {
         citizen: state.citizen,
+        problem: state.problem
     };
 }
 
@@ -23,8 +25,9 @@ function mapDispachToProps(dispatch) {
 // Connect the screens to Redux
 const SignInScreenContainer = connect(mapStateToProps, mapDispachToProps)(SignInScreen);
 const HomeScreenContainer = connect(mapStateToProps, mapDispachToProps)(HomeScreen);
+const CategoryScreenContainer = connect(mapStateToProps, mapDispachToProps)(CategoryScreen);
 const AuthStack = createStackNavigator({ SignIn: SignInScreenContainer });
-const AppStack = createStackNavigator({ Home: HomeScreenContainer });
+const AppStack = createStackNavigator({ Home: HomeScreenContainer, Category: CategoryScreenContainer });
 
 const NavigationContainer = createAppContainer(
     createSwitchNavigator(

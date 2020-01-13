@@ -20,7 +20,7 @@ export default class HomeScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text>Logged user: {JSON.stringify(this.props.citizen)}</Text>
+                <Text>Logged user: {JSON.stringify(this.props)}</Text>
                 <View style={styles.menu}>
                     <HomeMenuItem title='Reported problems' icon={<Octicons name='tasklist' size={27} />} />
                     <HomeMenuItem title='Rewards' icon={<Ionicons name='ios-ribbon' size={30} />} />

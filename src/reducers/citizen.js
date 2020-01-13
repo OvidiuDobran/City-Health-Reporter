@@ -1,10 +1,9 @@
-import { LOGIN } from '../actions/actio.types';
+import { LOGIN } from '../actions/action.types';
 
 export default function citizen(state = [], action) {
     switch (action.type) {
         case LOGIN:
-            console.log('CITIZEN: ' + JSON.stringify(action.citizen));
-            return { ...state, citizen: action.citizen };
+            return action.citizen;
         default:
             return state;
     }

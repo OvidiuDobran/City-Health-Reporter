@@ -20,7 +20,7 @@ export default class CategoryScreen extends React.Component {
     }
 
     _setCategory(category) {
-        this.props.setCategory(new Problem(), category);
+        this.props.setCategory(this.props.problem, category);
     }
 
     render() {
@@ -33,7 +33,10 @@ export default class CategoryScreen extends React.Component {
                     <CategoryListItem key={i} title={category.name} onPress={() => this._setCategory(category)} />
                 ))}
                 <Text>
-                    {'Category was updated. Problem:' + this.props.problem + '. Citizen: ' + this.props.citizen}
+                    {'Category was updated. Problem:' +
+                        JSON.stringify(this.props.problem) +
+                        '. Citizen: ' +
+                        JSON.stringify(this.props.citizen)}
                 </Text>
             </ScrollView>
         );
