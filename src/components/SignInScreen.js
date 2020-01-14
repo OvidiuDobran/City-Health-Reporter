@@ -24,6 +24,7 @@ export default class SignInScreen extends React.Component {
             // console.log('Wlecome back, ' + this.props.store.state.citizen.firstName() + ' ' + this.props.citizen.lastName());
             //await AsyncStorage.setItem('userToken', 'abc');
             this.props.navigation.navigate('ReportingApp');
+            this.props.initProblemsList();
         } else {
             console.log('NO ACCOUNT FOUND');
         }

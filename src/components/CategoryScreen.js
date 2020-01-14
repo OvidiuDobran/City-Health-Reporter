@@ -23,6 +23,10 @@ export default class CategoryScreen extends React.Component {
         this.props.setCategory(this.props.problem, category);
     }
 
+    _navigateFurther(){
+        this.props.navigation.navigate('Location');
+    }
+
     render() {
         if (!this.categories || this.categories.length == 0) {
             this._loadCategories();
@@ -30,7 +34,14 @@ export default class CategoryScreen extends React.Component {
         return (
             <ScrollView>
                 {this._categories.map((category, i) => (
-                    <CategoryListItem key={i} title={category.name} onPress={() => this._setCategory(category)} />
+                    <CategoryListItem
+                        key={i}
+                        title={category.name}
+                        onPress={() => {
+                            this._setCategory(category);
+                            this._navigateFurther();
+                        }}
+                    />
                 ))}
                 <Text>
                     {'Category was updated. Problem:' +

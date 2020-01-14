@@ -4,7 +4,7 @@ import { TouchableOpacity, AsyncStorage, Button, StyleSheet, View, Text } from '
 export default class HomeMenuItem extends React.Component {
     render() {
         return (
-            <TouchableOpacity style={styles.menuItem}>
+            <TouchableOpacity onPress={this.props.onPress} style={styles.menuItem}>
                 <Text style={styles.title}>{this.props.title}</Text>
                 {this.props.icon}
             </TouchableOpacity>

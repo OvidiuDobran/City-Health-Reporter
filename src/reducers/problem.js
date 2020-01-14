@@ -1,4 +1,4 @@
-import { CREATE_PROBLEM, SET_CATEGORY } from '../actions/action.types';
+import { CREATE_PROBLEM, SET_CATEGORY, SET_COORDINATES, ADD_PROBLEM, SET_DESCRIPTION } from '../actions/action.types';
 import Problem from '../data/Problem';
 
 export default function problem(state = [], action) {
@@ -12,6 +12,14 @@ export default function problem(state = [], action) {
             updatedProblem.category = action.category;
             console.log('The updated problem is: ' + JSON.stringify(updatedProblem));
             return updatedProblem;
+        case SET_COORDINATES:
+            updatedProblem = Object.assign({}, action.problem);
+            updatedProblem.latitude = action.latitude;
+            updatedProblem.longitude = action.longitude;
+            console.log('The updated problem is: ' + JSON.stringify(updatedProblem));
+            return updatedProblem;
+        case SET_DESCRIPTION:
+            return { ...action.problem, description: action.description };
         default:
             return state;
     }

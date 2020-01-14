@@ -22,7 +22,11 @@ export default class HomeScreen extends React.Component {
             <View style={styles.container}>
                 <Text>Logged user: {JSON.stringify(this.props)}</Text>
                 <View style={styles.menu}>
-                    <HomeMenuItem title='Reported problems' icon={<Octicons name='tasklist' size={27} />} />
+                    <HomeMenuItem
+                        title='Reported problems'
+                        onPress={() => this.props.navigation.navigate('ProblemsList')}
+                        icon={<Octicons name='tasklist' size={27} />}
+                    />
                     <HomeMenuItem title='Rewards' icon={<Ionicons name='ios-ribbon' size={30} />} />
                     <HomeMenuItem title='Profile' icon={<MaterialCommunityIcons name='account' size={30} />} />
                     <HomeMenuItem title='Cities Ranking' icon={<MaterialIcons name='location-city' size={30} />} />

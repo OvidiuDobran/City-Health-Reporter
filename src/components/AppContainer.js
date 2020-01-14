@@ -10,11 +10,15 @@ import CategoryScreen from './CategoryScreen';
 import AuthLoadingScreen from './AuthLoadingScreen';
 import store from '../store/store';
 import * as actionCreators from '../actions/action.creators';
+import LocationScreen from './LocationScreen';
+import DetailsScreen from './DetailsScreen';
+import ProblemsListScreen from './ProblemsListScreen';
 
 function mapStateToProps(state) {
     return {
         citizen: state.citizen,
-        problem: state.problem
+        problem: state.problem,
+        problems: state.problems
     };
 }
 
@@ -26,8 +30,17 @@ function mapDispachToProps(dispatch) {
 const SignInScreenContainer = connect(mapStateToProps, mapDispachToProps)(SignInScreen);
 const HomeScreenContainer = connect(mapStateToProps, mapDispachToProps)(HomeScreen);
 const CategoryScreenContainer = connect(mapStateToProps, mapDispachToProps)(CategoryScreen);
+const LocationScreenContainer = connect(mapStateToProps, mapDispachToProps)(LocationScreen);
+const DetailsScreenContainer = connect(mapStateToProps, mapDispachToProps)(DetailsScreen);
+const ProblemsListScreenContainer = connect(mapStateToProps, mapDispachToProps)(ProblemsListScreen);
 const AuthStack = createStackNavigator({ SignIn: SignInScreenContainer });
-const AppStack = createStackNavigator({ Home: HomeScreenContainer, Category: CategoryScreenContainer });
+const AppStack = createStackNavigator({
+    Home: HomeScreenContainer,
+    Category: CategoryScreenContainer,
+    Location: LocationScreenContainer,
+    Details: DetailsScreenContainer,
+    ProblemsList: ProblemsListScreenContainer
+});
 
 const NavigationContainer = createAppContainer(
     createSwitchNavigator(
