@@ -1,63 +1,79 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
-import { TouchableOpacity, AsyncStorage, Button, StyleSheet, ScrollView, Text } from 'react-native';
-import HomeMenuItem from './HomeMenuItem';
-import { Octicons, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import CATEGORIES from '../data/problem-category-mock';
-import ProblemCategory from '../data/ProblemCategory';
-import { ListItem } from 'react-native-elements';
+import { ScrollView } from 'react-native';
 import CategoryListItem from './CategoryListItem';
-import Problem from '../data/Problem';
+import { blueJeans } from './constants';
 
 export default class CategoryScreen extends React.Component {
     static navigationOptions = {
-        title: 'Choose a category'
+        title: 'Choose a category',
+        headerStyle: {
+            backgroundColor: blueJeans
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            fontWeight: 'bold'
+        }
     };
 
-    _categories = [];
+    constructor() {
+        super();
+        this.state = {
+            categories: []
+        };
+    }
 
-    _loadCategories() {
-        this._categories = CATEGORIES.map((c) => new ProblemCategory(c.id, c.name));
+    componentDidMount() {
+        this._loadCategories();
+    }
+
+    async _loadCategories() {
+        let categories = await this._fetchCategories();
+        this.setState({ categories });
+    }
+
+    async _fetchCategories() {
+        let request = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + this.props.citizen.token
+            }
+        };
+        try {
+            const response = await fetch('http://192.168.0.179:8080/problem/categories', request);
+            const responseData = await response.json();
+            return responseData;
+        } catch (error) {
+            console.log('Error fetching data: ' + error);
+            return [];
+        }
     }
 
     _setCategory(category) {
         this.props.setCategory(this.props.problem, category);
     }
 
-    _navigateFurther(){
+    _navigateFurther() {
         this.props.navigation.navigate('Location');
     }
 
     render() {
-        if (!this.categories || this.categories.length == 0) {
-            this._loadCategories();
-        }
         return (
             <ScrollView>
-                {this._categories.map((category, i) => (
+                {this.state.categories.map((category, i) => (
                     <CategoryListItem
                         key={i}
-                        title={category.name}
+                        index={i}
+                        title={category}
                         onPress={() => {
                             this._setCategory(category);
                             this._navigateFurther();
                         }}
                     />
                 ))}
-                <Text>
-                    {'Category was updated. Problem:' +
-                        JSON.stringify(this.props.problem) +
-                        '. Citizen: ' +
-                        JSON.stringify(this.props.citizen)}
-                </Text>
             </ScrollView>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'space-between'
-    }
-});

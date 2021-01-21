@@ -1,4 +1,12 @@
-import { CREATE_PROBLEM, SET_CATEGORY, SET_COORDINATES, ADD_PROBLEM, SET_DESCRIPTION } from '../actions/action.types';
+import {
+    CREATE_PROBLEM,
+    SET_CATEGORY,
+    SET_COORDINATES,
+    SET_DESCRIPTION,
+    SET_CITY_PROBLEM,
+    SET_CITIZEN_EMAIL,
+    SET_ADDRESS
+} from '../actions/action.types';
 import Problem from '../data/Problem';
 
 export default function problem(state = [], action) {
@@ -6,20 +14,17 @@ export default function problem(state = [], action) {
         case CREATE_PROBLEM:
             return new Problem();
         case SET_CATEGORY:
-            console.log('ACTION.PROBLEM: ' + JSON.stringify(action.problem.problem));
-            console.log('ACTION.CATEGORY: ' + JSON.stringify(action.category));
-            let updatedProblem = Object.assign({}, action.problem);
-            updatedProblem.category = action.category;
-            console.log('The updated problem is: ' + JSON.stringify(updatedProblem));
-            return updatedProblem;
+            return { ...action.problem, category: action.category };
         case SET_COORDINATES:
-            updatedProblem = Object.assign({}, action.problem);
-            updatedProblem.latitude = action.latitude;
-            updatedProblem.longitude = action.longitude;
-            console.log('The updated problem is: ' + JSON.stringify(updatedProblem));
-            return updatedProblem;
+            return { ...action.problem, latitude: action.latitude, longitude: action.longitude };
         case SET_DESCRIPTION:
             return { ...action.problem, description: action.description };
+        case SET_CITY_PROBLEM:
+            return { ...action.problem, city: action.city };
+        case SET_CITIZEN_EMAIL:
+            return { ...action.problem, citizenEmail: action.citizenEmail };
+        case SET_ADDRESS:
+            return { ...action.problem, address: action.address };
         default:
             return state;
     }

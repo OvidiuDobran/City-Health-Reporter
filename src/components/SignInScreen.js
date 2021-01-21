@@ -1,42 +1,59 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
-import {
-    KeyboardAvoidingView,
-    AsyncStorage,
-    Button,
-    TextInput,
-    StyleSheet,
-    View,
-    TouchableOpacity,
-    Text
-} from 'react-native';
-import Citizen from '../data/Citizen';
-import CITIZENS from '../data/citizens-mock';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, ImageBackground } from 'react-native';
+import { Overlay, SocialIcon } from 'react-native-elements';
+import { blueJeans } from './constants';
+
+const FAIL_REASON = { CONNECTION_ERROR: 'Connection Error', NO_ACCOUNT: 'Accound not found', NONE: 'NONE' };
 
 export default class SignInScreen extends React.Component {
     static navigationOptions = {
-        title: 'Please sign in'
-    };
-
-    _signInAsync = () => {
-        const citizen = this.getAuthenticatingCitizen(this.email, this.password);
-        if (citizen) {
-            this.props.login(citizen);
-            // console.log('Wlecome back, ' + this.props.store.state.citizen.firstName() + ' ' + this.props.citizen.lastName());
-            //await AsyncStorage.setItem('userToken', 'abc');
-            this.props.navigation.navigate('ReportingApp');
-            this.props.initProblemsList();
-        } else {
-            console.log('NO ACCOUNT FOUND');
+        title: 'Please sign in',
+        headerStyle: {
+            backgroundColor: blueJeans
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            fontWeight: 'bold'
         }
     };
 
-    getAuthenticatingCitizen(email, password) {
-        const mockedCitizen = CITIZENS.find((obj) => obj.email === email && obj.password === password);
-        if (mockedCitizen) {
-            return new Citizen(mockedCitizen.id, mockedCitizen.firstName, mockedCitizen.lastName, mockedCitizen.email);
-        }
-        return null;
+    constructor() {
+        super();
+        this.state = { failReason: FAIL_REASON.NONE };
     }
+
+    _signInAsync = async () => {
+        const loginResponse = await this._fetchAuthenticatingCitizen(this.email, this.password);
+        if (loginResponse.status == 200) {
+            const citizen = loginResponse.responseData;
+            this.props.login(citizen);
+            this.props.navigation.navigate('ReportingApp');
+        } else if (!loginResponse || loginResponse.status == 403) {
+            this.setState({ failReason: FAIL_REASON.NO_ACCOUNT });
+        }
+    };
+
+    _fetchAuthenticatingCitizen = async (email, password) => {
+        let loginForm = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        };
+        try {
+            const response = await fetch('http://192.168.0.179:8080/session/login/citizen', loginForm);
+            if (response.status != 200) {
+                return { status: response.status };
+            }
+            const responseData = await response.json();
+            return { status: response.status, responseData };
+        } catch (error) {
+            return null;
+        }
+    };
 
     _updateEmail(text) {
         this.email = text;
@@ -48,13 +65,15 @@ export default class SignInScreen extends React.Component {
 
     render() {
         return (
-            <KeyboardAvoidingView style={styles.container} behavior='padding' enabled>
-                <View style={styles.container}>
+            <View style={styles.container}>
+                <ImageBackground
+                    source={require('../../assets/signin_background.png')}
+                    style={styles.backgroundContainer}
+                >
                     <TextInput
                         style={styles.input}
                         keyboardType='email-address'
-                        placeholder='email'
-                        autoFocus={true}
+                        placeholder='Email'
                         returnKeyType={'next'}
                         onChangeText={(text) => this._updateEmail(text)}
                         onSubmitEditing={() => {
@@ -65,7 +84,7 @@ export default class SignInScreen extends React.Component {
                     <TextInput
                         style={styles.input}
                         secureTextEntry={true}
-                        placeholder='password'
+                        placeholder='Password'
                         onChangeText={(text) => this._updatePassword(text)}
                         onSubmitEditing={() => this._signInAsync()}
                         ref={(input) => {
@@ -73,11 +92,38 @@ export default class SignInScreen extends React.Component {
                         }}
                     />
 
-                    <TouchableOpacity style={styles.signInButton}>
-                        <Button title='Sign in' onPress={() => this._signInAsync()} />
+                    <TouchableOpacity onPress={() => this._signInAsync()} style={styles.signInButton}>
+                        <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Sign in</Text>
                     </TouchableOpacity>
-                </View>
-            </KeyboardAvoidingView>
+
+                    {/* <TouchableOpacity>
+                        <SocialIcon
+                            title='Sign In With Facebook'
+                            button
+                            type='facebook'
+                            width={250}
+                            style={{ borderRadius: 10, marginTop: 20, marginBottom: 10 }}
+                        />
+                    </TouchableOpacity> */}
+
+                    <Overlay
+                        isVisible={this.state.failReason != FAIL_REASON.NONE}
+                        width={300}
+                        height={70}
+                        overlayStyle={styles.overlayStyle}
+                    >
+                        <View>
+                            <Text>{this.state.failReason}</Text>
+                            <TouchableOpacity
+                                onPress={() => this.setState({ failReason: FAIL_REASON.NONE })}
+                                style={styles.okButton}
+                            >
+                                <Text style={{ color: '#34a4eb', fontSize: 18, fontWeight: 'bold' }}>OK</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Overlay>
+                </ImageBackground>
+            </View>
         );
     }
 }
@@ -85,8 +131,13 @@ export default class SignInScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        alignItems: 'stretch'
+        // justifyContent: 'stretch'
+    },
+    backgroundContainer: {
+        flex: 1,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'flex-end'
     },
     input: {
         fontSize: 18,
@@ -96,5 +147,21 @@ const styles = StyleSheet.create({
         borderBottomColor: 'gray',
         margin: 1
     },
-    signInButton: { marginTop: 10 }
+    signInButton: {
+        width: 120,
+        height: 50,
+        backgroundColor: blueJeans,
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 15,
+        elevation: 3,
+        marginBottom: 40
+    },
+    okButton: {
+        width: 40,
+        height: 20,
+        backgroundColor: 'white'
+    },
+    overlayStyle: { justifyContent: 'space-between' }
 });

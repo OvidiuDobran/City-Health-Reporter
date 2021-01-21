@@ -3,14 +3,31 @@ import {
     CREATE_PROBLEM,
     SET_CATEGORY,
     SET_COORDINATES,
-    ADD_PROBLEM,
     SET_DESCRIPTION,
-    INIT_PROBLEMS_LIST
+    SET_CITY_PROBLEM,
+    SET_CITIZEN_EMAIL,
+    CLEAR_PROBLEM_IMAGES,
+    SET_PROBLEM_IMAGES,
+    SET_CITY,
+    SET_REWARD,
+    SET_ACQUISITION,
+    SET_DEFINED_REWARDS,
+    SET_CLAIMED_REWARDS,
+    SET_BUDGET,
+    SET_CITIZEN,
+    SET_ADDRESS
 } from './action.types';
 
 export function login(citizen) {
     return {
         type: LOGIN,
+        citizen
+    };
+}
+
+export function setCitizen(citizen) {
+    return {
+        type: SET_CITIZEN,
         citizen
     };
 }
@@ -46,16 +63,81 @@ export function setDescription(problem, description) {
     };
 }
 
-export function addProblem(problems, problem) {
+export function setCityProblem(problem, city) {
     return {
-        type: ADD_PROBLEM,
-        problems,
-        problem
+        type: SET_CITY_PROBLEM,
+        problem,
+        city
     };
 }
 
-export function initProblemsList() {
+export function setCitizenEmail(problem, citizenEmail) {
     return {
-        type: INIT_PROBLEMS_LIST
+        type: SET_CITIZEN_EMAIL,
+        problem,
+        citizenEmail
+    };
+}
+
+export function clearProblemImages() {
+    return {
+        type: CLEAR_PROBLEM_IMAGES
+    };
+}
+
+export function setProblemImages(images) {
+    return {
+        type: SET_PROBLEM_IMAGES,
+        images
+    };
+}
+
+export function setCity(city) {
+    return {
+        type: SET_CITY,
+        city
+    };
+}
+
+export function setReward(reward) {
+    return {
+        type: SET_REWARD,
+        reward
+    };
+}
+
+export function setAcquisition(acquisition) {
+    return {
+        type: SET_ACQUISITION,
+        acquisition
+    };
+}
+
+export function setDefinedRewards(rewards) {
+    return {
+        type: SET_DEFINED_REWARDS,
+        rewards
+    };
+}
+
+export function setClaimedRewards(acquisitions) {
+    return {
+        type: SET_CLAIMED_REWARDS,
+        acquisitions
+    };
+}
+
+export function setBudget(budget) {
+    return {
+        type: SET_BUDGET,
+        budget
+    };
+}
+
+export function setAddress(problem, address) {
+    return {
+        type: SET_ADDRESS,
+        problem,
+        address
     };
 }

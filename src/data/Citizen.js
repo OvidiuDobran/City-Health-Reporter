@@ -3,12 +3,14 @@ export default class Citizen {
     _firstName;
     _lastName;
     _email;
+    _token;
 
-    constructor(id, firstName, lastName, email) {
+    constructor(id, firstName, lastName, email, token) {
         this._id = id;
         this._firstName = firstName;
         this._lastName = lastName;
         this._email = email;
+        this._token = token;
     }
 
     get id() {
@@ -25,6 +27,10 @@ export default class Citizen {
 
     get email() {
         return this._email;
+    }
+
+    get token() {
+        return this._token;
     }
 
     set id(id) {

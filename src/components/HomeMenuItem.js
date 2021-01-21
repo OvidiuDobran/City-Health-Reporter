@@ -1,5 +1,7 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
-import { TouchableOpacity, AsyncStorage, Button, StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { bdazzledBlue } from './constants';
 
 export default class HomeMenuItem extends React.Component {
     render() {
@@ -19,13 +21,13 @@ const styles = StyleSheet.create({
         padding: 9,
         height: 55,
         width: 250,
-        backgroundColor: '#00BCD4',
-        borderColor: '#fff',
+        backgroundColor: bdazzledBlue,
         justifyContent: 'space-around',
         alignItems: 'center',
         elevation: 2
     },
     title: {
-        fontSize: 18
+        fontSize: 18,
+        color: 'white'
     }
 });
